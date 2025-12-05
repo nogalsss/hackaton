@@ -1,5 +1,4 @@
-from planificador import llamar_gemini_para_plan
-from gen_calendar import generar_ics_desde_plan
+from planificador import generar_plan_y_ics
 
 payload = {
     "curso": {"nombre": "Cálculo I", "codigo": "MAT1610"},
@@ -20,11 +19,10 @@ payload = {
     "intensidad": "normal"
 }
 
-plan = llamar_gemini_para_plan(payload)
-
-contenido_ics = generar_ics_desde_plan(plan)
+plan, ics_str = generar_plan_y_ics(payload)
 
 with open("plan_estudio.ics", "w", encoding="utf-8") as f:
-    f.write(contenido_ics)
+    f.write(ics_str)
 
 print("Plan validado y .ics generado ✅")
+print("Semanas:", len(plan.semanas))

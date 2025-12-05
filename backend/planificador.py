@@ -4,6 +4,7 @@ from typing import Dict, Any
 
 from google import genai
 from google.genai import errors as genai_errors
+from gen_calendar import generar_ics_desde_plan
 
 from parametros import GENAI_KEY, GEMINI_MODEL, ZONA_HORARIA
 from modelos import PlanEstudio
@@ -156,3 +157,8 @@ def llamar_gemini_para_plan(payload_entrada: Dict[str, Any]) -> PlanEstudio:
     json_plan = _normalizar_prioridades(json.loads(texto))
     plan_validado = PlanEstudio(**json_plan)
     return plan_validado
+
+def generar_plan_y_ics(payload_entrada):
+    plan = llamar_gemini_para_plan(payload_entrada)
+    ics_str = generar_ics_desde_plan(plan)
+    return plan, ics_str
