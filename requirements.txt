@@ -1,5 +1,17 @@
-google
+# IA + validación + env
 google-genai
-json
-typing
 pydantic
+python-dotenv
+
+# UI
+streamlit
+requests
+
+# lectura de apuntes
+PyPDF2
+pillow
+pytesseract
+
+# utilidades de datos/cursos
+pandas
+sqlalchemy
