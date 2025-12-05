@@ -1,143 +1,511 @@
-import streamlit as st # type: ignore
-import requests
-import re
-from datetime import datetime, timedelta
+from usuarios import init_users_table, create_user, get_user, update_user
+from onboarding import (
+    init_onboarding_table,
+    save_onboarding, get_onboarding,
+    update_availability, update_mood,
+    save_daily_mood, get_daily_mood,
+    init_daily_mood_table, init_weekly_availability_table,
+)
+from cursos import get_all_courses
+from datetime import date
 
-def procesador_ics(contenido_ics_raw: str) -> str:
+import streamlit as st
 
-    lineas = contenido_ics_raw.splitlines()
-    lineas_corregidas = []
-    
-    lineas = [line for line in lineas if not line.startswith(('VERSION:', 'PRODID:'))]
-    
-
-    lineas_corregidas.append('BEGIN:VCALENDAR')
-    lineas_corregidas.append('VERSION:2.0')
-    lineas_corregidas.append('PRODID:-//TuAppOrganizadorUC//EN')
-
-    # Bandera para saber si estamos dentro de un VEVENT y guardar la última DTSTART
-    dentro_evento = False
-    ultima_dtstart_value = None 
-    
-    # --- 2. CORRECCIÓN DE EVENTOS Y FECHAS ---
-    
-    for linea in lineas:
-        
-        # Inicia VEVENT
-        if linea.strip() == 'BEGIN:VEVENT':
-            dentro_evento = True
-            ultima_dtstart_value = None
-            lineas_corregidas.append(linea)
-            continue
-            
-        # Fin VEVENT
-        elif linea.strip() == 'END:VEVENT':
-            # 3. CORRECCIÓN DE DTEND FALTANTE
-            # Solo aplica la corrección si se encontró un DTSTART con VALUE=DATE (Evento de día completo)
-            if dentro_evento and ultima_dtstart_value and 'VALUE=DATE' in ultima_dtstart_value: 
-                
-                # Extrae la fecha (Ej: 20250801)
-                fecha_str = ultima_dtstart_value.split(':')[-1]
-                
-                try:
-                    # Convierte la fecha y suma un día para DTEND
-                    fecha_inicio = datetime.strptime(fecha_str, '%Y%m%d') 
-                    fecha_fin = fecha_inicio + timedelta(days=1)
-                    fecha_fin_str = fecha_fin.strftime('%Y%m%d')
-                    
-                    # Añade la línea DTEND corregida
-                    lineas_corregidas.append(f'DTEND;VALUE=DATE:{fecha_fin_str}')
-                except ValueError:
-                    # Si falla la conversión (fecha inválida), ignora la corrección de DTEND
-                    pass 
-            
-            dentro_evento = False
-            lineas_corregidas.append(linea)
-            continue
-
-        # 2. CORRECCIÓN DE DTSTART (01AUG25 -> AAAAMMDD)
-        if linea.startswith('DTSTART') and dentro_evento:
-            
-            # Detecta el formato no estándar (DDMESAA)
-            match_date = re.search(r'VALUE=DATE:(\d{2}[A-Z]{3}\d{2})', linea)
-            
-            if match_date:
-                fecha_vieja = match_date.group(1) # Ej: 01AUG25
-                try:
-                    # Convierte la fecha vieja (01AUG25) a AAAAMMDD (20250801)
-                    fecha_obj = datetime.strptime(fecha_vieja, '%d%b%y') 
-                    fecha_nueva = fecha_obj.strftime('%Y%m%d')
-                    
-                    # Reemplaza la línea DTSTART completa
-                    linea_corregida = linea.replace(fecha_vieja, fecha_nueva)
-                    lineas_corregidas.append(linea_corregida)
-                    ultima_dtstart_value = linea_corregida # Guarda para usar en DTEND
-                    continue
-                except ValueError:
-                    # Si falla, simplemente usa la línea original
-                    pass
-            
-            # Si no hubo corrección o es un formato válido (como DTSTART:20251101T100000Z)
-            ultima_dtstart_value = linea
-            lineas_corregidas.append(linea)
-            continue
-
-        # Si no es un VEVENT, DTSTART, DTEND, simplemente lo agrega
-        lineas_corregidas.append(linea)
-    
-    # Asegura que el archivo termina correctamente
-    if 'END:VCALENDAR' not in lineas_corregidas[-1]:
-        lineas_corregidas.append('END:VCALENDAR')
-        
-    return "\n".join(lineas_corregidas)
-
-def descargar_y_procesar_canvas(url_canvas: str) -> str:
-    headers = {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+# --------- setup inicial ----------
+st.set_page_config(page_title="SmartSemester – Demo login", page_icon="📚")
+# --------- estilos globales ----------
+st.markdown(
+    """
+    <style>
+    /* Más espacio horizontal en el contenido principal */
+    .block-container {
+        padding-top: 2rem;
+        padding-bottom: 2rem;
+        padding-left: 3rem;
+        padding-right: 3rem;
     }
-    try:
-        st.info(f"Conectando a Canvas... ({url_canvas[:50]}...)")
-        
-        response = requests.get(url_canvas, timeout=15)
-        response.raise_for_status() 
-        
-        contenido_ics_raw = response.text
-        ics_corregido = procesador_ics(contenido_ics_raw) 
-        
-        return ics_corregido
-        
-    except requests.exceptions.RequestException as e:
-        st.error(f"Error al conectar con la URL de Canvas. Verifica el enlace. Detalle: {e}")
-        return ""
-    except Exception as e:
-        st.error(f"Ocurrió un error inesperado al procesar. Detalle: {e}")
-        return ""
+    /* Aumentar ancho de la sidebar */
+    [data-testid="stSidebar"] {
+        min-width: 330px !important;  /* antes se ve a ~250px */
+        max-width: 350px !important;
+    }
+
+    /* Más espacio entre secciones de la sidebar */
+    .sidebar-section {
+        margin-bottom: 1.8rem;
+    }
+
+    /* Ajustar radio y tamaño de botones de la sidebar */
+    [data-testid="stSidebar"] .stButton > button {
+        width: 100%;
+        border-radius: 10px;
+        padding: 0.5rem 0.8rem;
+        margin-bottom: 0.5rem;
+    }
+
+    /* Alinear mejor los títulos */
+    [data-testid="stSidebar"] h3, [data-testid="stSidebar"] h2 {
+        margin-top: 0.8rem;
+    }
 
 
+    /* Un poquito más redondeados los botones */
+    .stButton > button {
+        border-radius: 999px;
+        padding: 0.35rem 1.2rem;
+        font-weight: 500;
+    }
 
-st.title("✨ Organizador de Estudio UC - Sincronización Canvas")
+    /* Cards reutilizables */
+    .section-card {
+        background-color: transparent;      /* sin bloque oscuro */
+        border-radius: 0;                   /* sin esquinas redondeadas grandes */
+        padding: 0.5rem 0 1.2rem 0;         /* poco padding arriba/abajo */
+        border-bottom: 1px solid #1f2937;   /* solo una línea separadora abajo */
+        margin-bottom: 1.5rem;              /* espacio hacia la siguiente sección */
+    }
 
-url_canvas_input = st.text_input(
-    "Pega aquí el Vínculo del Feed del Calendario de Canvas:",
-    placeholder="Ej: https://cursos.canvas.uc.cl/feeds/calendars/user_XXXXXXX.ics"
+
+    .section-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        margin-bottom: 0.8rem;
+    }
+
+    .section-subtitle {
+        font-size: 0.9rem;
+        color: #9ca3af;
+        margin-bottom: 0.6rem;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True,
 )
 
-texto_ics_final_corregido = "" 
+# Crear tablas si no existen
+init_users_table()
+init_onboarding_table()
 
-if url_canvas_input:
-    texto_ics_final_corregido = descargar_y_procesar_canvas(url_canvas_input)
-    
-    if texto_ics_final_corregido:
-        st.success("¡Sincronización exitosa! Archivo ICS corregido generado.")
+init_daily_mood_table()
+init_weekly_availability_table()
 
-        # Aquí iría el Render Plan (análisis de fechas y bloques de estudio)
-        # st.subheader("Resumen de Pruebas y Bloques de Estudio Generados:")
-        # ...
+# Estado global de sesión
+if "user" not in st.session_state:
+    st.session_state["user"] = None  # aquí guardaremos un dict con id, username, email
 
-        # Botón export .ics
-        st.download_button(
-            label="✅ Descargar ICS Corregido para Google Calendar",
-            data=texto_ics_final_corregido,
-            file_name='canvas_organizador_corregido.ics',
-            mime='text/calendar'
+if "screen" not in st.session_state:
+    st.session_state["screen"] = "login"  # "login", "register", "onboarding", "dashboard"
+
+
+# --------- helpers de UI ----------
+def go_to(screen_name: str):
+    st.session_state["screen"] = screen_name
+
+
+def logout():
+    st.session_state["user"] = None
+    st.session_state["screen"] = "login"
+    st.rerun()
+
+
+# --------- sidebar ----------
+# --------- sidebar ----------
+with st.sidebar:
+    st.title("SmartSemester 🤓")
+
+    if st.session_state["user"]:
+        user = st.session_state["user"]
+
+        # HEADER USER
+        st.markdown('<div class="sidebar-section">', unsafe_allow_html=True)
+        st.write(f"Sesión iniciada como **{user['username']}**")
+        if user.get("email"):
+            st.caption(user["email"])
+        colA, colB = st.columns(2)
+        with colA:
+            if st.button("Editar usuario"):
+                st.session_state["screen"] = "edit_user"
+        with colB:
+            if st.button("Cerrar sesión"):
+                logout()
+        st.markdown("</div>", unsafe_allow_html=True)
+
+
+        data = get_onboarding(user["id"])
+
+        # ====== SEMANA ACTUAL ======
+        if data:
+            st.markdown('<div class="sidebar-section">', unsafe_allow_html=True)
+            st.subheader("📅 Semana actual")
+
+            disponibilidad = data["availability"] or ""
+            st.write(f"**Días disponibles:** {disponibilidad or 'No definido'}")
+
+            # Estado del desplegable
+            if "sidebar_edit_avail" not in st.session_state:
+                st.session_state["sidebar_edit_avail"] = False
+
+            if not st.session_state["sidebar_edit_avail"]:
+                if st.button("✏️ Editar disponibilidad", key="btn_sidebar_edit"):
+                    st.session_state["sidebar_edit_avail"] = True
+            else:
+                dias_semana = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes"]
+                dias_actuales = [d.strip() for d in disponibilidad.split(",") if d.strip()]
+
+                nueva_disponibilidad = st.multiselect(
+                    "¿Qué días puedes estudiar esta semana?",
+                    dias_semana,
+                    default=dias_actuales,
+                    key="sidebar_disp",
+                )
+
+                col_guardar, col_cancelar = st.columns(2)
+                with col_guardar:
+                    if st.button("Guardar", key="sidebar_disp_btn"):
+                        if not nueva_disponibilidad:
+                            st.warning("Selecciona al menos un día 🤓")
+                        else:
+                            update_availability(user["id"], ",".join(nueva_disponibilidad))
+                            st.success("Disponibilidad actualizada ✅")
+                            st.session_state["sidebar_edit_avail"] = False
+                            st.rerun()
+
+                with col_cancelar:
+                    if st.button("Cancelar", key="sidebar_disp_cancel"):
+                        st.session_state["sidebar_edit_avail"] = False
+                        st.rerun()
+
+            st.markdown("</div>", unsafe_allow_html=True)
+
+
+            # ====== MOOD HOY ======
+            st.markdown('<div class="sidebar-section">', unsafe_allow_html=True)
+            st.subheader("🙂 Mood de hoy")
+
+            mood_opciones = ["😞 Mal", "😐 Meh", "🙂 Bien", "😁 Motivadísimo"]
+            mood_hoy_guardado = get_daily_mood(user["id"])
+            mood_inicial = mood_hoy_guardado or data["mood"]
+            idx = mood_opciones.index(mood_inicial) if mood_inicial in mood_opciones else 2
+
+            mood_hoy = st.radio(
+                "¿Cómo te sientes hoy?",
+                mood_opciones,
+                index=idx,
+                key="sidebar_mood",
+            )
+
+            if st.button("Guardar mood de hoy", key="sidebar_mood_btn"):
+                save_daily_mood(user["id"], mood_hoy)
+                update_mood(user["id"], mood_hoy)
+                st.success("Mood guardado 😊")
+                st.rerun()
+
+            st.markdown("</div>", unsafe_allow_html=True)
+
+        else:
+            st.info("Completa tu onboarding para configurar tu semana 🙂")
+
+    else:
+        st.write("No has iniciado sesión todavía.")
+        st.button("Iniciar sesión", on_click=go_to, args=("login",))
+        st.button("Registrarse", on_click=go_to, args=("register",))
+
+
+# --------- pantallas principales ----------
+def login_screen():
+    st.header("Iniciar sesión")
+
+    with st.form("login_form"):
+        username = st.text_input("Usuario")
+        password = st.text_input("Contraseña", type="password")
+        submitted = st.form_submit_button("Entrar")
+
+    if submitted:
+        user_row = get_user(username, password)
+        if user_row:
+            # Guardamos datos mínimos del usuario en session_state
+            st.session_state["user"] = {
+                "id": user_row["id"],
+                "username": user_row["username"],
+                "email": user_row["email"],
+            }
+
+            # Decidir siguiente pantalla según si ya tiene onboarding o no
+            onboard_data = get_onboarding(user_row["id"])
+            if onboard_data:
+                st.session_state["screen"] = "dashboard"
+            else:
+                st.session_state["screen"] = "onboarding"
+
+            # Opcional: podríamos poner un success, pero no se verá porque rerun
+            # st.success("¡Sesión iniciada! 🎉")
+
+            # 🔁 Forzar que se vuelva a ejecutar todo el script
+            st.rerun()
+
+        else:
+            st.error("Usuario o contraseña incorrectos.")
+
+
+
+def register_screen():
+    st.header("Crear una cuenta")
+
+    with st.form("register_form"):
+        username = st.text_input("Elige un usuario")
+        email = st.text_input("Correo (opcional)")
+        password = st.text_input("Contraseña", type="password")
+        password2 = st.text_input("Repite la contraseña", type="password")
+        submitted = st.form_submit_button("Registrarme")
+
+    if submitted:
+        if not username or not password:
+            st.warning("El usuario y la contraseña son obligatorios.")
+            return
+
+        if password != password2:
+            st.warning("Las contraseñas no coinciden.")
+            return
+
+        ok, error = create_user(username, email, password)
+        if ok:
+            st.success("Cuenta creada 🎉 Ahora puedes iniciar sesión.")
+            go_to("login")
+        else:
+            st.error(error or "No se pudo crear el usuario.")
+
+
+def onboarding_screen():
+    st.header("🧭 Configuración de tus ramos")
+
+    # 1) Traer TODOS los ramos desde la base
+    all_courses = get_all_courses()
+
+    if not all_courses:
+        st.error("No encontré ramos en la base de datos (course_summary está vacía).")
+        return
+
+    st.subheader("1️⃣ Selecciona tus ramos para este semestre")
+    st.caption(
+        "Ramos a elegir para el prototipo: DPT6382, IIC2233, MAT1610, IMT2210, IMT2200."
+    )
+
+    selected = st.multiselect(
+        "Escoge tus cursos:",
+        options=all_courses,
+        # puedes dejar sin default o preseleccionar tus 5 de demo si quieres:
+        # default=["DPT6382", "IIC2233", "MAT1610", "IMT2210", "IMT2200"],
+    )
+
+    st.subheader("2️⃣ Disponibilidad semanal")
+    dias = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes"]
+    disponibilidad = st.multiselect("¿Qué días puedes estudiar?", dias)
+
+    st.subheader("3️⃣ ¿Cómo te sientes hoy?")
+    mood = st.radio(
+        "Tu mood actual:",
+        ["😞 Mal", "😐 Meh", "🙂 Bien", "😁 Motivadísimo"],
+        horizontal=True
+    )
+
+    if st.button("Guardar y continuar ➡"):
+        if not selected:
+            st.warning("Selecciona al menos 1 ramo.")
+            return
+
+        if not disponibilidad:
+            st.warning("Selecciona al menos un día disponible 🤓")
+            return
+
+        save_onboarding(
+            st.session_state["user"]["id"],
+            ",".join(selected),          # ej: "DPT6382,IIC2233,MAT1610"
+            ",".join(disponibilidad),    # ej: "Lunes,Miércoles"
+            mood
         )
+
+        st.success("¡Onboarding completado!")
+        st.session_state["screen"] = "dashboard"
+
+
+def dashboard():
+    user_id = st.session_state["user"]["id"]
+    data = get_onboarding(user_id)
+
+    if not data:
+        st.warning("No encontré tu configuración inicial. Vuelve al onboarding.")
+        if st.button("Ir al onboarding"):
+            st.session_state["screen"] = "onboarding"
+        return
+
+    ramos = [r.strip() for r in data["selected_ramos"].split(",") if r.strip()]
+
+    # 🔹 AÑADE ESTAS DOS LÍNEAS
+    disponibilidad = data["availability"] or ""
+    mood_resumen = data["mood"]
+
+    st.markdown("## 📊 Tu dashboard de ramos")
+    st.caption("Aquí ves tus cursos del semestre y puedes entrar al plan de cada uno.")
+    st.markdown("")
+
+    st.markdown("### 📌 Resumen rápido")
+    col1, col2 = st.columns(2)
+    with col1:
+        st.write(f"🧠 **Mood actual:** {mood_resumen}")
+    with col2:
+        st.write(f"📆 **Días disponibles:** {disponibilidad or 'No definido'}")
+
+    st.markdown("---")
+
+    if not ramos:
+        st.info("Aún no has seleccionado ramos. Ve al onboarding para configurarlos.")
+        if st.button("Configurar ramos", key="btn_cfg_ramos"):
+            st.session_state["screen"] = "onboarding"
+        return
+
+    st.subheader("Tus cursos")
+
+    cols = st.columns(2)
+    for i, code in enumerate(ramos):
+        col = cols[i % 2]
+        with col:
+            with st.container(border=True):
+                st.markdown(f"### 📘 {code}")
+
+                st.write("Aquí después vas a ver:")
+                st.write("- Progreso del plan de estudio")
+                st.write("- Próximas sesiones sugeridas")
+                st.write("- Archivos / apuntes asociados al ramo")
+
+                if st.button(f"Ver plan para {code}", key=f"plan_{code}"):
+                    st.session_state["current_course"] = code
+                    st.session_state["screen"] = "course"
+                    st.rerun()
+
+def edit_user_screen():
+    user = st.session_state["user"]
+    st.header("Editar usuario")
+
+    with st.form("edit_user_form"):
+        new_username = st.text_input("Nombre de usuario", value=user["username"])
+        new_email = st.text_input("Correo electrónico (opcional)", value=user.get("email") or "")
+        submitted = st.form_submit_button("Guardar cambios")
+
+    if submitted:
+        if not new_username:
+            st.warning("El nombre de usuario no puede estar vacío.")
+            return
+
+        update_user(user["id"], new_username=new_username, new_email=new_email or None)
+        st.session_state["user"]["username"] = new_username
+        st.session_state["user"]["email"] = new_email or None
+
+        st.success("Datos actualizados ✅")
+
+    st.markdown("")  # pequeño espacio
+    if st.button("⬅ Volver al dashboard"):
+        st.session_state["screen"] = "dashboard"
+        st.rerun()
+
+
+
+def course_detail_screen():
+    code = st.session_state.get("current_course")
+
+    if not code:
+        st.warning("No se encontró el ramo seleccionado.")
+        if st.button("Volver al dashboard"):
+            st.session_state["screen"] = "dashboard"
+            st.rerun()
+        return
+
+    # Cabecera
+    st.markdown(f"### 📘 Plan de estudio para **{code}**")
+
+    if st.button("⬅ Volver al dashboard"):
+        st.session_state["screen"] = "dashboard"
+        st.rerun()
+
+    st.markdown("---")
+
+    # Sección 1: subir material del curso
+    st.subheader("1️⃣ Sube tu material del ramo")
+    st.caption("Puedes subir un PDF con el programa, apuntes o imágenes del curso.")
+
+    uploaded_files = st.file_uploader(
+        "Sube tus archivos (solo para demo, no se guardan en servidor):",
+        type=["pdf", "png", "jpg", "jpeg", "txt"],
+        accept_multiple_files=True,
+        key=f"uploader_{code}",
+    )
+
+    if uploaded_files:
+        st.write("Archivos seleccionados:")
+        for f in uploaded_files:
+            st.write(f"- {f.name}")
+
+    st.markdown("---")
+
+    # Sección 2: generar plan (mock)
+    st.subheader("2️⃣ Generar plan de estudio (demo)")
+
+    st.caption(
+        "En la versión con IA, aquí se generaría automáticamente un plan según tu material. "
+        "Por ahora mostramos un ejemplo estático para el jurado."
+    )
+
+    if st.button("✨ Generar plan demo"):
+        st.success("Plan generado (demo) ✅")
+
+        st.markdown(
+            f"""
+            **Plan sugerido para {code} (demo):**
+
+            - Semana 1–2: leer y resumir el programa del curso.
+            - Semana 3–4: practicar ejercicios básicos 3 veces por semana.
+            - Semana 5–7: repaso intensivo antes del primer control / solemne.
+            - Semana 8–10: foco en contenidos más débiles detectados.
+            - Semana 11–14: simulacros de prueba y repaso general.
+            """
+        )
+
+    st.markdown("---")
+
+    # Sección 3: descarga calendario (demo)
+    st.subheader("3️⃣ Exportar a calendario (demo)")
+
+    st.caption(
+        "Aquí en la versión final se podría descargar un archivo `.ics` para agregar las sesiones de estudio a tu calendario."
+    )
+
+    if st.button("📅 Descargar plan en .ics (demo)"):
+        st.info("Para la demo no estamos generando el archivo real, solo mostrando el flujo.")
+
+
+# --------- ROUTER ---------
+if st.session_state["user"]:
+    if st.session_state["screen"] == "onboarding":
+        onboarding_screen()
+    elif st.session_state["screen"] == "dashboard":
+        dashboard()
+    elif st.session_state["screen"] == "course":
+        course_detail_screen()
+    elif st.session_state["screen"] == "edit_user":
+        edit_user_screen()
+    else:
+        # Si por alguna razón el screen no calza, decidimos según si tiene onboarding
+        user_id = st.session_state["user"]["id"]
+        data = get_onboarding(user_id)
+        if data:
+            st.session_state["screen"] = "dashboard"
+            dashboard()
+        else:
+            st.session_state["screen"] = "onboarding"
+            onboarding_screen()
+else:
+    # Usuario NO logueado
+    if st.session_state["screen"] == "register":
+        register_screen()
+    else:
+        st.session_state["screen"] = "login"
+        login_screen()
