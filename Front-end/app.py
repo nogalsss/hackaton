@@ -107,8 +107,6 @@ def logout():
     st.session_state["screen"] = "login"
     st.rerun()
 
-
-# --------- sidebar ----------
 # --------- sidebar ----------
 with st.sidebar:
     st.title("SmartSemester 🤓")
@@ -351,7 +349,7 @@ def dashboard():
     st.markdown("### 📌 Resumen rápido")
     col1, col2 = st.columns(2)
     with col1:
-        st.write(f"🧠 **Mood actual:** {mood_resumen}")
+        st.write(f"🧠 **Ánimo actual:** {mood_resumen}")
     with col2:
         st.write(f"📆 **Días disponibles:** {disponibilidad or 'No definido'}")
 
