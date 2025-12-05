@@ -1,7 +1,7 @@
-from pathlib import Path
 import sqlite3
+from pathlib import Path
 
-DB_PATH = Path(__file__).resolve().parent / "ramos_uc.db"
+DB_PATH = Path("ramos_uc.db")
 
 def get_connection():
     conn = sqlite3.connect(DB_PATH, check_same_thread=False)

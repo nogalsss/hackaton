@@ -2,7 +2,7 @@
 import sqlite3
 from pathlib import Path
 
-DB_PATH = Path("ramos_uc.db")  # mismo archivo que ya tienes
+DB_PATH = Path(__file__).resolve().parent / "ramos_uc.db"
 
 def get_connection():
     # check_same_thread=False para poder usar la conexión en callbacks de Streamlit

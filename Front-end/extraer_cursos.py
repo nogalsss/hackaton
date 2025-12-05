@@ -1,9 +1,11 @@
 import re
 import pandas as pd
 from sqlalchemy import create_engine
+from pathlib import Path
 
-SQL_FILE = "backup-ramos.sql"   # nombre del archivo .sql
-OUTPUT_DB = "ramos_uc.db"       # nombre de la base sqlite
+BASE = Path(__file__).resolve().parent
+SQL_FILE = str(BASE / "backup-ramos.sql")
+OUTPUT_DB = str(BASE / "ramos_uc.db")
 
 # Leer todo el archivo SQL
 with open(SQL_FILE, "r", encoding="utf-8") as f:

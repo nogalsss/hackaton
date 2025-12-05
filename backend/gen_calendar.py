@@ -1,8 +1,8 @@
 from datetime import datetime
 from typing import List
 
-from parametros import ZONA_HORARIA
-from modelos import PlanEstudio
+from .parametros import ZONA_HORARIA
+from .modelos import PlanEstudio
 
 
 def _dt_ical(fecha: str, hora: str) -> str:

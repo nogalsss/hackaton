@@ -8,8 +8,18 @@ from onboarding import (
 )
 from cursos import get_all_courses
 from datetime import date
+import sys
+import base64
+from pathlib import Path
 
 import streamlit as st
+
+# Para importar el backend cuando corremos: streamlit run Front-end/app.py
+ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.append(str(ROOT))
+
+from backend.planificador import generar_plan_y_ics_multimodal
 
 # --------- setup inicial ----------
 st.set_page_config(page_title="SmartSemester – Demo login", page_icon="📚")
@@ -98,6 +108,100 @@ if "screen" not in st.session_state:
 
 
 # --------- helpers de UI ----------
+def _archivo_a_entrada(uploaded_file, tipo_sugerido=None):
+    ext = uploaded_file.name.split(".")[-1].lower()
+    data = uploaded_file.getvalue()
+    b64 = base64.b64encode(data).decode("utf-8")
+    if ext == "pdf":
+        formato = "pdf"
+    elif ext in ("png", "jpg", "jpeg"):
+        formato = "imagen"
+    else:
+        formato = "texto"
+    return {
+        "tipo": tipo_sugerido,
+        "formato": formato,
+        "nombre": uploaded_file.name,
+        "contenido_base64": b64,
+    }
+
+
+def _mood_a_estado_animo(mood_str: str) -> str:
+    mood_str = (mood_str or "").lower()
+    if "mal" in mood_str or "😞" in mood_str:
+        return "cansado"
+    if "motivad" in mood_str or "😁" in mood_str:
+        return "motivado"
+    return "normal"
+
+
+def _dias_a_bloques(disponibilidad_str: str):
+    if not disponibilidad_str:
+        return []
+    mapa = {
+        "lunes": "lunes",
+        "martes": "martes",
+        "miércoles": "miercoles",
+        "miercoles": "miercoles",
+        "jueves": "jueves",
+        "viernes": "viernes",
+        "sábado": "sabado",
+        "sabado": "sabado",
+        "domingo": "domingo",
+    }
+    dias = [d.strip().lower() for d in disponibilidad_str.split(",") if d.strip()]
+    bloques = []
+    for d in dias:
+        dd = mapa.get(d)
+        if not dd:
+            continue
+        bloques.append({"dia": dd, "inicio": "19:00", "fin": "21:00"})
+    return bloques
+
+def plan_a_parrafos_simple(plan):
+    if not plan:
+        return "No hay plan disponible."
+
+    if isinstance(plan, list):
+        sesiones = plan
+    elif isinstance(plan, dict):
+        # ordenar por clave numérica si aplica
+        def clave_orden(k):
+            try:
+                return int(k)
+            except:
+                return 10**9
+        sesiones = [plan[k] for k in sorted(plan.keys(), key=clave_orden)]
+    else:
+        return str(plan)
+
+    out = []
+    for i, s in enumerate(sesiones, start=1):
+        if not isinstance(s, dict):
+            continue
+
+        titulo = s.get("titulo", f"Sesión {i}")
+        fecha = s.get("fecha", "fecha no definida")
+        inicio = s.get("inicio", "")
+        fin = s.get("fin", "")
+        tipo = s.get("tipo", "sesión")
+        temas = s.get("temas", [])
+        output = s.get("output", "")
+
+        temas_txt = ", ".join(temas) if isinstance(temas, list) else str(temas)
+        hora_txt = f" de {inicio} a {fin}" if inicio or fin else ""
+
+        parrafo = (
+            f"En la **sesión {i}** trabajaremos **{titulo}** el día **{fecha}**{hora_txt}. "
+            f"Será una sesión de tipo **{tipo}**. "
+            f"Los temas principales serán: {temas_txt if temas_txt else 'no especificados'}. "
+            f"El objetivo es: {output if output else 'no especificado'}."
+        )
+        out.append(parrafo)
+
+    return "\n\n".join(out)
+
+
 def go_to(screen_name: str):
     st.session_state["screen"] = screen_name
 
@@ -426,55 +530,88 @@ def course_detail_screen():
 
     st.markdown("---")
 
-    # Sección 1: subir material del curso
-    st.subheader("1️⃣ Sube tu material del ramo")
-    st.caption("Puedes subir un PDF con el programa, apuntes o imágenes del curso.")
 
+    # Sección 2: generar plan real
+    st.subheader("2. Generar plan de estudio (Gemini Integrated)")
+
+    user_id = st.session_state["user"]["id"]
+    onboard = get_onboarding(user_id)
+
+    if not onboard:
+        st.warning("No encontro tu onboarding. Vuelve a configurarlo.")
+        return
+
+    onboard = dict(onboard)
+    disponibilidad_str = onboard.get("availability") or ""
+    mood_base = onboard.get("mood") or "Bien"
+
+    estado_animo = _mood_a_estado_animo(mood_base)
+    bloques = _dias_a_bloques(disponibilidad_str)
+
+    if not bloques:
+        st.warning("Tu disponibilidad esta vacía. Edita tus días en el onboarding.")
+        return
+    
     uploaded_files = st.file_uploader(
-        "Sube tus archivos (solo para demo, no se guardan en servidor):",
-        type=["pdf", "png", "jpg", "jpeg", "txt"],
-        accept_multiple_files=True,
-        key=f"uploader_{code}",
-    )
+    "📎 Sube programa, guías o apuntes del ramo",
+    type=["pdf", "png", "jpg", "jpeg", "txt"],
+    accept_multiple_files=True,
+    key=f"uploader_{code}",)
 
-    if uploaded_files:
-        st.write("Archivos seleccionados:")
-        for f in uploaded_files:
-            st.write(f"- {f.name}")
+    if not uploaded_files:
+        st.info("Sube al menos un archivo para generar un plan real.")
+        return
 
-    st.markdown("---")
+    entradas = [_archivo_a_entrada(f) for f in uploaded_files]
 
-    # Sección 2: generar plan (mock)
-    st.subheader("2️⃣ Generar plan de estudio (demo)")
+    payload = {
+        "curso": {"nombre": code, "codigo": code},
+        "semestre": {},  # backend completa si detecta fechas
+        "disponibilidad": {"zona_horaria": "America/Santiago", "bloques": bloques},
+        "evaluaciones_conocidas": [],
+        "estado_animo": estado_animo,
+        "entradas": entradas,
+    }
 
-    st.caption(
-        "En la versión con IA, aquí se generaría automáticamente un plan según tu material. "
-        "Por ahora mostramos un ejemplo estático para el jurado."
-    )
+    if st.button("🎯 Generar plan con IA", key=f"gen_real_{code}"):
+        with st.spinner("Generando plan y calendario..."):
+            try:
+                plan, ics_str = generar_plan_y_ics_multimodal(payload)
+                st.session_state[f"plan_{code}"] = plan
+                st.session_state[f"ics_{code}"] = ics_str
+                st.success("Plan generado! ✅")
+            except Exception as e:
+                st.error(f"Falló la generación del plan: {e}")
 
-    if st.button("✨ Generar plan demo"):
-        st.success("Plan generado (demo) ✅")
+    plan_obj = st.session_state.get(f"plan_{code}")
+    ics_guardado = st.session_state.get(f"ics_{code}")
 
-        st.markdown(
-            f"""
-            **Plan sugerido para {code} (demo):**
+    try:
+        data_plan = plan_obj.model_dump()
+    except Exception:
+        data_plan = getattr(plan_obj, "dict", lambda: {})()
 
-            - Semana 1–2: leer y resumir el programa del curso.
-            - Semana 3–4: practicar ejercicios básicos 3 veces por semana.
-            - Semana 5–7: repaso intensivo antes del primer control / solemne.
-            - Semana 8–10: foco en contenidos más débiles detectados.
-            - Semana 11–14: simulacros de prueba y repaso general.
-            """
+    # OJO: tu función simple espera sesiones directas.
+    # Si tu JSON viene con "semanas", puedes aplanar así:
+    sesiones = []
+    for semana in data_plan.get("semanas", []):
+        sesiones.extend(semana.get("sesiones", []))
+
+    st.markdown(plan_a_parrafos_simple(sesiones))
+
+    # Sección 3: descarga calendario real
+    st.subheader("3️⃣ Exportar a calendario (real)")
+
+    if ics_guardado:
+        st.download_button(
+            label="📅 Descargar plan en .ics",
+            data=ics_guardado,
+            file_name=f"plan_{code}.ics",
+            mime="text/calendar",
+            key=f"dl_{code}",
         )
-
-    st.markdown("---")
-
-    # Sección 3: descarga calendario (demo)
-    st.subheader("3️⃣ Exportar a calendario (demo)")
-
-    st.caption(
-        "Aquí en la versión final se podría descargar un archivo `.ics` para agregar las sesiones de estudio a tu calendario."
-    )
+    else:
+        st.info("Primero genera el plan para habilitar el .ics.")
 
     if st.button("📅 Descargar plan en .ics (demo)"):
         st.info("Para la demo no estamos generando el archivo real, solo mostrando el flujo.")

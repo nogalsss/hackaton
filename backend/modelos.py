@@ -1,6 +1,6 @@
 from pydantic import BaseModel, Field
 from typing import List, Optional, Literal
-from parametros import ZONA_HORARIA
+from .parametros import ZONA_HORARIA
 
 TipoEvaluacion = Literal["control", "tarea", "certamen", "examen", "otro"]
 TipoSesion = Literal["teoria", "ejercicios", "repaso", "evaluacion", "proyecto"]

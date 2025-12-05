@@ -2,7 +2,7 @@ import base64
 import json
 from pathlib import Path
 
-from planificador import generar_plan_y_ics_multimodal
+from backend.planificador import generar_plan_y_ics_multimodal
 
 
 def _b64_file(path: Path) -> str:

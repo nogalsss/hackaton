@@ -24,10 +24,11 @@ try:
     import pytesseract
 except Exception:
     pytesseract = None
+    
+from .gen_calendar import generar_ics_desde_plan
+from .parametros import GENAI_KEY, GEMINI_MODEL_RESUMEN, GEMINI_MODEL_PLAN, ZONA_HORARIA
+from .modelos import PlanEstudio
 
-from gen_calendar import generar_ics_desde_plan
-from parametros import GENAI_KEY, GEMINI_MODEL_RESUMEN, GEMINI_MODEL_PLAN, ZONA_HORARIA
-from modelos import PlanEstudio
 MODO_DEMO = True
 
 
