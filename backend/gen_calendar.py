@@ -43,10 +43,11 @@ def generar_ics_desde_plan(plan: PlanEstudio) -> str:
                 descripcion += "Temas: " + ", ".join(sesion.temas) + "\\n"
             if sesion.output:
                 descripcion += "Objetivo: " + sesion.output
+            uid = sesion.id or f"W{semana.numero:02d}-S{uid_contador:02d}"
 
             lineas.extend([
                 "BEGIN:VEVENT",
-                f"UID:{sesion.id or uid_contador}@organizador-ia",
+                f"UID:{uid}@organizador-ia",
                 f"DTSTAMP:{datetime.now().strftime('%Y%m%dT%H%M%S')}",
                 f"DTSTART;TZID={ZONA_HORARIA}:{dtstart}",
                 f"DTEND;TZID={ZONA_HORARIA}:{dtend}",
