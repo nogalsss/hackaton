@@ -8,18 +8,21 @@ from modelos import PlanEstudio
 def _dt_ical(fecha: str, hora: str) -> str:
     """
     Convierte fecha y hora a formato iCal.
-    Acepta fechas DD-MM-YYYY o YYYY-MM-DD; el modelo a veces devuelve ISO.
+    Acepta fechas DD-MM-YYYY, YYYY-MM-DD, y tiempos HH:MM u HH:MM:SS.
+    Si el tiempo falta o viene raro, cae en 00:00.
     """
-    formatos_fecha = ["%d-%m-%Y", "%Y-%m-%d"]
-    for fmt in formatos_fecha:
-        try:
-            dt = datetime.strptime(f"{fecha} {hora}", f"{fmt} %H:%M")
-            break
-        except ValueError:
-            continue
-    else:
-        raise ValueError(f"Formato de fecha no soportado: {fecha}")
-    return dt.strftime("%d%m%YT%H%M%S")
+    fecha = (fecha or "").strip()
+    hora = (hora or "").strip() or "00:00"
+    formatos_fecha = ["%d-%m-%Y", "%Y-%m-%d", "%d/%m/%Y", "%Y/%m/%d"]
+    formatos_hora = ["%H:%M", "%H:%M:%S"]
+    for f_fmt in formatos_fecha:
+        for h_fmt in formatos_hora:
+            try:
+                dt = datetime.strptime(f"{fecha} {hora}", f"{f_fmt} {h_fmt}")
+                return dt.strftime("%d%m%YT%H%M%S")
+            except ValueError:
+                continue
+    raise ValueError(f"Formato de fecha no soportado: {fecha} {hora}")
 
 def generar_ics_desde_plan(plan: PlanEstudio) -> str:
     lineas: List[str] = [
