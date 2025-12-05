@@ -1,0 +1,437 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Organizador Academico IA//ES//
+CALSCALE:GREGORIAN
+BEGIN:VEVENT
+UID:W01-S01@organizador-ia
+DTSTAMP:20251205T104126
+DTSTART;TZID=America/Santiago:09032026T190000
+DTEND;TZID=America/Santiago:09032026T210000
+SUMMARY:Introducción al Curso y Repaso de Funciones
+DESCRIPTION:Temas: Programa y sistema de evaluación, Repaso: funciones lineales, cuadráticas, trigonométricas, exponenciales, logarítmicas, Determinación de dominio y recorrido\nObjetivo: Comprensión del programa del curso y refresco de conocimientos sobre funciones básicas.
+END:VEVENT
+BEGIN:VEVENT
+UID:W01-S02@organizador-ia
+DTSTAMP:20251205T104126
+DTSTART;TZID=America/Santiago:11032026T190000
+DTEND;TZID=America/Santiago:11032026T210000
+SUMMARY:Concepto Intuitivo de Límite
+DESCRIPTION:Temas: Idea de límite a través de tablas y gráficas, Límites laterales y su relación con la existencia del límite, Límites infinitos y límites al infinito (introducción gráfica)\nObjetivo: Comprensión conceptual del límite y habilidad para estimar límites gráficamente.
+END:VEVENT
+BEGIN:VEVENT
+UID:W01-S03@organizador-ia
+DTSTAMP:20251205T104126
+DTSTART;TZID=America/Santiago:14032026T100000
+DTEND;TZID=America/Santiago:14032026T130000
+SUMMARY:Práctica de Funciones y Límites Básicos
+DESCRIPTION:Temas: Resolución de ejercicios de dominio y rango, Análisis de propiedades de funciones, Cálculo de límites por sustitución directa y análisis gráfico\nObjetivo: Dominio de las funciones básicas y cálculo de límites sencillos.
+END:VEVENT
+BEGIN:VEVENT
+UID:W02-S01@organizador-ia
+DTSTAMP:20251205T104126
+DTSTART;TZID=America/Santiago:16032026T190000
+DTEND;TZID=America/Santiago:16032026T210000
+SUMMARY:Propiedades de los Límites
+DESCRIPTION:Temas: Límite de una suma, producto, cociente y potencia, Teorema del Sándwich, Límites de funciones compuestas\nObjetivo: Conocimiento y aplicación de las propiedades de los límites.
+END:VEVENT
+BEGIN:VEVENT
+UID:W02-S02@organizador-ia
+DTSTAMP:20251205T104126
+DTSTART;TZID=America/Santiago:18032026T190000
+DTEND;TZID=America/Santiago:18032026T210000
+SUMMARY:Resolución de Límites Indeterminados (0/0)
+DESCRIPTION:Temas: Identificación de la forma indeterminada 0/0, Métodos de factorización y simplificación, Métodos de racionalización para expresiones con raíces\nObjetivo: Habilidad para resolver límites indeterminados 0/0 utilizando técnicas algebraicas.
+END:VEVENT
+BEGIN:VEVENT
+UID:W02-S03@organizador-ia
+DTSTAMP:20251205T104126
+DTSTART;TZID=America/Santiago:21032026T100000
+DTEND;TZID=America/Santiago:21032026T130000
+SUMMARY:Taller de Ejercicios de Límites
+DESCRIPTION:Temas: Ejercicios variados de aplicación de propiedades, Problemas con formas indeterminadas 0/0, Casos especiales con límites trigonométricos\nObjetivo: Consolidación de las técnicas de cálculo de límites y resolución de problemas.
+END:VEVENT
+BEGIN:VEVENT
+UID:W03-S01@organizador-ia
+DTSTAMP:20251205T104126
+DTSTART;TZID=America/Santiago:23032026T190000
+DTEND;TZID=America/Santiago:23032026T210000
+SUMMARY:Límites Infinitos y Asíntotas
+DESCRIPTION:Temas: Cálculo de límites que dan infinito, Cálculo de límites cuando x tiende a infinito, Determinación y análisis de asíntotas verticales y horizontales\nObjetivo: Capacidad para calcular límites infinitos y al infinito, e identificar asíntotas.
+END:VEVENT
+BEGIN:VEVENT
+UID:W03-S02@organizador-ia
+DTSTAMP:20251205T104126
+DTSTART;TZID=America/Santiago:25032026T190000
+DTEND;TZID=America/Santiago:25032026T210000
+SUMMARY:Continuidad de Funciones
+DESCRIPTION:Temas: Definición de continuidad en un punto (tres condiciones), Continuidad en intervalos, Clasificación de discontinuidades (evitable, de salto, infinita)\nObjetivo: Entendimiento de la definición de continuidad y habilidad para clasificar discontinuidades.
+END:VEVENT
+BEGIN:VEVENT
+UID:W03-S03@organizador-ia
+DTSTAMP:20251205T104126
+DTSTART;TZID=America/Santiago:28032026T100000
+DTEND;TZID=America/Santiago:28032026T130000
+SUMMARY:Problemas de Límites y Continuidad
+DESCRIPTION:Temas: Ejercicios de cálculo de asíntotas, Determinación de la continuidad de funciones a trozos, Resolución de problemas para encontrar constantes que aseguren continuidad\nObjetivo: Dominio en el cálculo de límites complejos y análisis de la continuidad de funciones.
+END:VEVENT
+BEGIN:VEVENT
+UID:W04-S01@organizador-ia
+DTSTAMP:20251205T104126
+DTSTART;TZID=America/Santiago:30032026T190000
+DTEND;TZID=America/Santiago:30032026T210000
+SUMMARY:Teoremas de Continuidad
+DESCRIPTION:Temas: Enunciado y aplicación del Teorema de Bolzano, Enunciado y aplicación del Teorema del Valor Intermedio, Resolución de problemas usando estos teoremas\nObjetivo: Habilidad para aplicar el Teorema de Bolzano y el TVI en la resolución de problemas.
+END:VEVENT
+BEGIN:VEVENT
+UID:W04-S02@organizador-ia
+DTSTAMP:20251205T104126
+DTSTART;TZID=America/Santiago:01042026T190000
+DTEND;TZID=America/Santiago:01042026T210000
+SUMMARY:Repaso para Certamen I1 (Unidad 1)
+DESCRIPTION:Temas: Preguntas y respuestas sobre Límites, Repaso de Continuidad y sus aplicaciones, Clarificación de dudas antes del certamen\nObjetivo: Resolución de dudas y fortalecimiento de puntos débiles para el certamen.
+END:VEVENT
+BEGIN:VEVENT
+UID:W04-S03@organizador-ia
+DTSTAMP:20251205T104126
+DTSTART;TZID=America/Santiago:04042026T100000
+DTEND;TZID=America/Santiago:04042026T130000
+SUMMARY:Simulacro de Certamen I1
+DESCRIPTION:Temas: Resolución de un certamen de prueba completo, Análisis de errores comunes y estrategias para el examen\nObjetivo: Evaluación del nivel de preparación para el certamen y estrategia de estudio final.
+END:VEVENT
+BEGIN:VEVENT
+UID:W05-S01@organizador-ia
+DTSTAMP:20251205T104126
+DTSTART;TZID=America/Santiago:06042026T190000
+DTEND;TZID=America/Santiago:06042026T210000
+SUMMARY:Último Repaso Pre-Certamen I1
+DESCRIPTION:Temas: Puntos clave de Límites y Continuidad, Estrategias para abordar el certamen\nObjetivo: Reforzamiento final de los conceptos y seguridad para el certamen.
+END:VEVENT
+BEGIN:VEVENT
+UID:W05-S02@organizador-ia
+DTSTAMP:20251205T104126
+DTSTART;TZID=America/Santiago:08042026T190000
+DTEND;TZID=America/Santiago:08042026T210000
+SUMMARY:Introducción a la Derivada
+DESCRIPTION:Temas: La pendiente de la recta tangente, Definición formal de derivada (regla de los cuatro pasos), Derivadas por definición de funciones básicas\nObjetivo: Comprensión conceptual de la derivada y capacidad para calcular derivadas usando la definición.
+END:VEVENT
+BEGIN:VEVENT
+UID:W05-S03@organizador-ia
+DTSTAMP:20251205T104126
+DTSTART;TZID=America/Santiago:11042026T100000
+DTEND;TZID=America/Santiago:11042026T130000
+SUMMARY:Interpretación y Primeras Reglas de Derivación
+DESCRIPTION:Temas: Interpretación de la derivada como tasa de cambio, Reglas básicas de derivación: constante, potencia, múltiplo constante, Derivada de la suma y la diferencia\nObjetivo: Aplicación de las primeras reglas de derivación y comprensión de sus interpretaciones.
+END:VEVENT
+BEGIN:VEVENT
+UID:W06-S01@organizador-ia
+DTSTAMP:20251205T104126
+DTSTART;TZID=America/Santiago:13042026T190000
+DTEND;TZID=America/Santiago:13042026T210000
+SUMMARY:Reglas de Derivación: Producto y Cociente
+DESCRIPTION:Temas: Demostración y aplicación de la regla del producto, Demostración y aplicación de la regla del cociente, Ejercicios combinados\nObjetivo: Dominio de las reglas de derivación para productos y cocientes de funciones.
+END:VEVENT
+BEGIN:VEVENT
+UID:W06-S02@organizador-ia
+DTSTAMP:20251205T104126
+DTSTART;TZID=America/Santiago:15042026T190000
+DTEND;TZID=America/Santiago:15042026T210000
+SUMMARY:La Regla de la Cadena
+DESCRIPTION:Temas: Concepto de función compuesta, Aplicación de la regla de la cadena para funciones simples y anidadas\nObjetivo: Habilidad para derivar funciones compuestas utilizando la regla de la cadena.
+END:VEVENT
+BEGIN:VEVENT
+UID:W06-S03@organizador-ia
+DTSTAMP:20251205T104126
+DTSTART;TZID=America/Santiago:18042026T100000
+DTEND;TZID=America/Santiago:18042026T130000
+SUMMARY:Derivadas de Funciones Trigonométricas y Ejercicios Combinados
+DESCRIPTION:Temas: Derivadas de sen(x), cos(x), tan(x), etc., Ejercicios que combinan todas las reglas de derivación vistas\nObjetivo: Capacidad para derivar funciones trigonométricas y resolver problemas complejos con múltiples reglas.
+END:VEVENT
+BEGIN:VEVENT
+UID:W07-S01@organizador-ia
+DTSTAMP:20251205T104126
+DTSTART;TZID=America/Santiago:20042026T190000
+DTEND;TZID=America/Santiago:20042026T210000
+SUMMARY:Derivadas de Exponenciales y Logarítmicas
+DESCRIPTION:Temas: Derivadas de e^x, a^x, ln(x), log_a(x), Aplicación de la regla de la cadena con estas funciones\nObjetivo: Dominio de las derivadas de funciones exponenciales y logarítmicas.
+END:VEVENT
+BEGIN:VEVENT
+UID:W07-S02@organizador-ia
+DTSTAMP:20251205T104126
+DTSTART;TZID=America/Santiago:22042026T190000
+DTEND;TZID=America/Santiago:22042026T210000
+SUMMARY:Derivación Implícita
+DESCRIPTION:Temas: Concepto de función implícita, Técnica de derivación implícita paso a paso, Cálculo de la pendiente de la recta tangente en un punto dado\nObjetivo: Habilidad para derivar funciones implícitamente y encontrar pendientes de tangentes.
+END:VEVENT
+BEGIN:VEVENT
+UID:W07-S03@organizador-ia
+DTSTAMP:20251205T104126
+DTSTART;TZID=America/Santiago:25042026T100000
+DTEND;TZID=America/Santiago:25042026T130000
+SUMMARY:Derivadas de Orden Superior y Ejercicios
+DESCRIPTION:Temas: Cálculo de segundas y terceras derivadas, Aplicaciones de la derivación implícita, Repaso general de reglas de derivación\nObjetivo: Capacidad para calcular derivadas de orden superior y resolver problemas que requieren derivación implícita.
+END:VEVENT
+BEGIN:VEVENT
+UID:W08-S01@organizador-ia
+DTSTAMP:20251205T104126
+DTSTART;TZID=America/Santiago:27042026T190000
+DTEND;TZID=America/Santiago:27042026T210000
+SUMMARY:Regla de L'Hôpital: Formas 0/0 y ∞/∞
+DESCRIPTION:Temas: Condiciones para aplicar la regla de L'Hôpital, Aplicación a límites con formas 0/0 e ∞/∞, Ejemplos y contraejemplos\nObjetivo: Habilidad para aplicar la regla de L'Hôpital correctamente.
+END:VEVENT
+BEGIN:VEVENT
+UID:W08-S02@organizador-ia
+DTSTAMP:20251205T104126
+DTSTART;TZID=America/Santiago:29042026T190000
+DTEND;TZID=America/Santiago:29042026T210000
+SUMMARY:Otras Formas Indeterminadas y L'Hôpital
+DESCRIPTION:Temas: Manipulación de formas indeterminadas (∞ - ∞, 0·∞, 1^∞, 0^0, ∞^0) para usar L'Hôpital, Ejercicios de aplicación\nObjetivo: Capacidad para resolver límites con diversas formas indeterminadas usando la regla de L'Hôpital.
+END:VEVENT
+BEGIN:VEVENT
+UID:W08-S03@organizador-ia
+DTSTAMP:20251205T104126
+DTSTART;TZID=America/Santiago:02052026T100000
+DTEND;TZID=America/Santiago:02052026T130000
+SUMMARY:Introducción a Razones de Cambio Relacionadas
+DESCRIPTION:Temas: Planteamiento de problemas de razones de cambio, Estrategias de resolución, Ejemplos básicos (escaleras, volúmenes)\nObjetivo: Entendimiento del concepto de razones de cambio relacionadas y habilidad para plantear problemas.
+END:VEVENT
+BEGIN:VEVENT
+UID:W09-S01@organizador-ia
+DTSTAMP:20251205T104126
+DTSTART;TZID=America/Santiago:04052026T190000
+DTEND;TZID=America/Santiago:04052026T210000
+SUMMARY:Ejercicios de Razones de Cambio Relacionadas
+DESCRIPTION:Temas: Resolución de problemas de razones de cambio (geometría, física), Interpretación de los resultados\nObjetivo: Dominio en la resolución de problemas de razones de cambio relacionadas.
+END:VEVENT
+BEGIN:VEVENT
+UID:W09-S02@organizador-ia
+DTSTAMP:20251205T104126
+DTSTART;TZID=America/Santiago:06052026T190000
+DTEND;TZID=America/Santiago:06052026T210000
+SUMMARY:Análisis de Crecimiento y Decrecimiento
+DESCRIPTION:Temas: Relación entre la derivada y el crecimiento/decrecimiento de una función, Puntos críticos, Determinación de intervalos de crecimiento y decrecimiento\nObjetivo: Habilidad para determinar los intervalos de crecimiento y decrecimiento de una función.
+END:VEVENT
+BEGIN:VEVENT
+UID:W09-S03@organizador-ia
+DTSTAMP:20251205T104126
+DTSTART;TZID=America/Santiago:09052026T100000
+DTEND;TZID=America/Santiago:09052026T130000
+SUMMARY:Máximos y Mínimos Locales (Criterio de la Primera Derivada)
+DESCRIPTION:Temas: Aplicación del criterio de la primera derivada para encontrar extremos locales, Ejercicios de análisis de funciones\nObjetivo: Capacidad para identificar máximos y mínimos locales utilizando el criterio de la primera derivada.
+END:VEVENT
+BEGIN:VEVENT
+UID:W10-S01@organizador-ia
+DTSTAMP:20251205T104126
+DTSTART;TZID=America/Santiago:11052026T190000
+DTEND;TZID=America/Santiago:11052026T210000
+SUMMARY:Criterio de la Segunda Derivada
+DESCRIPTION:Temas: Aplicación del criterio de la segunda derivada para clasificar puntos críticos, Comparación con el criterio de la primera derivada\nObjetivo: Dominio del criterio de la segunda derivada para identificar extremos locales.
+END:VEVENT
+BEGIN:VEVENT
+UID:W10-S02@organizador-ia
+DTSTAMP:20251205T104126
+DTSTART;TZID=America/Santiago:13052026T190000
+DTEND;TZID=America/Santiago:13052026T210000
+SUMMARY:Concavidad y Puntos de Inflexión
+DESCRIPTION:Temas: Relación de la segunda derivada con la concavidad y convexidad, Determinación de puntos de inflexión, Interpretación gráfica\nObjetivo: Habilidad para analizar la concavidad de una función e identificar puntos de inflexión.
+END:VEVENT
+BEGIN:VEVENT
+UID:W10-S03@organizador-ia
+DTSTAMP:20251205T104126
+DTSTART;TZID=America/Santiago:16052026T100000
+DTEND;TZID=America/Santiago:16052026T130000
+SUMMARY:Ejercicios de Criterios de Derivadas y Concavidad
+DESCRIPTION:Temas: Ejercicios combinados de criterios de la primera y segunda derivada, Análisis completo de concavidad y puntos de inflexión\nObjetivo: Capacidad para realizar un análisis completo del comportamiento de una función.
+END:VEVENT
+BEGIN:VEVENT
+UID:W11-S01@organizador-ia
+DTSTAMP:20251205T104126
+DTSTART;TZID=America/Santiago:18052026T190000
+DTEND;TZID=America/Santiago:18052026T210000
+SUMMARY:Trazado de Gráficas de Funciones (Parte 1)
+DESCRIPTION:Temas: Pasos para el trazado de gráficas: dominio, intersecciones, simetrías, asíntotas., Ejemplos iniciales de funciones racionales y polinomiales.\nObjetivo: Habilidad para realizar los primeros pasos en el análisis de funciones para el trazado de gráficas.
+END:VEVENT
+BEGIN:VEVENT
+UID:W11-S02@organizador-ia
+DTSTAMP:20251205T104126
+DTSTART;TZID=America/Santiago:20052026T190000
+DTEND;TZID=America/Santiago:20052026T210000
+SUMMARY:Trazado de Gráficas de Funciones (Parte 2)
+DESCRIPTION:Temas: Incorporación de crecimiento, decrecimiento, extremos, concavidad y puntos de inflexión al gráfico., Ejercicios completos de trazado de gráficas.\nObjetivo: Capacidad para trazar gráficas de funciones completas utilizando toda la información de las derivadas.
+END:VEVENT
+BEGIN:VEVENT
+UID:W11-S03@organizador-ia
+DTSTAMP:20251205T104126
+DTSTART;TZID=America/Santiago:23052026T100000
+DTEND;TZID=America/Santiago:23052026T130000
+SUMMARY:Teoremas de Rolle y del Valor Medio
+DESCRIPTION:Temas: Enunciado y condiciones del Teorema de Rolle, Enunciado y condiciones del Teorema del Valor Medio, Aplicaciones y ejemplos de ambos teoremas\nObjetivo: Comprensión de los teoremas de Rolle y del Valor Medio, y habilidad para aplicarlos.
+END:VEVENT
+BEGIN:VEVENT
+UID:W12-S01@organizador-ia
+DTSTAMP:20251205T104126
+DTSTART;TZID=America/Santiago:25052026T190000
+DTEND;TZID=America/Santiago:25052026T210000
+SUMMARY:Introducción a Problemas de Optimización
+DESCRIPTION:Temas: Concepto de optimización, Pasos para resolver problemas de optimización: identificar variables, función objetivo, restricciones., Ejemplos sencillos de maximización/minimización.\nObjetivo: Comprensión del proceso de optimización y habilidad para plantear problemas.
+END:VEVENT
+BEGIN:VEVENT
+UID:W12-S02@organizador-ia
+DTSTAMP:20251205T104126
+DTSTART;TZID=America/Santiago:27052026T190000
+DTEND;TZID=America/Santiago:27052026T210000
+SUMMARY:Estrategias de Optimización (Parte 1)
+DESCRIPTION:Temas: Resolución de problemas de optimización geométrica, Aplicación de los criterios de la primera y segunda derivada a problemas de optimización\nObjetivo: Habilidad para resolver problemas de optimización básicos.
+END:VEVENT
+BEGIN:VEVENT
+UID:W12-S03@organizador-ia
+DTSTAMP:20251205T104126
+DTSTART;TZID=America/Santiago:30052026T100000
+DTEND;TZID=America/Santiago:30052026T130000
+SUMMARY:Aplicaciones de Rolle y Teorema del Valor Medio
+DESCRIPTION:Temas: Resolución de ejercicios que requieren el uso de Rolle y TVM, Interpretación de los resultados en contextos específicos\nObjetivo: Dominio en la aplicación de los teoremas de Rolle y del Valor Medio.
+END:VEVENT
+BEGIN:VEVENT
+UID:W13-S01@organizador-ia
+DTSTAMP:20251205T104126
+DTSTART;TZID=America/Santiago:01062026T190000
+DTEND;TZID=America/Santiago:01062026T210000
+SUMMARY:Problemas de Optimización Avanzados
+DESCRIPTION:Temas: Optimización en economía y ciencias, Problemas con múltiples restricciones\nObjetivo: Capacidad para abordar problemas de optimización más complejos.
+END:VEVENT
+BEGIN:VEVENT
+UID:W13-S02@organizador-ia
+DTSTAMP:20251205T104126
+DTSTART;TZID=America/Santiago:03062026T190000
+DTEND;TZID=America/Santiago:03062026T210000
+SUMMARY:Repaso de Aplicaciones de la Derivada
+DESCRIPTION:Temas: Resumen de tasas de cambio, extremos, concavidad, optimización, Preguntas y respuestas sobre la Unidad 2\nObjetivo: Clarificación de dudas y consolidación de conocimientos de la Unidad 2.
+END:VEVENT
+BEGIN:VEVENT
+UID:W13-S03@organizador-ia
+DTSTAMP:20251205T104126
+DTSTART;TZID=America/Santiago:06062026T100000
+DTEND;TZID=America/Santiago:06062026T130000
+SUMMARY:Estudio de Casos con Derivadas
+DESCRIPTION:Temas: Análisis de funciones complejas paso a paso, Problemas que integran múltiples conceptos de derivadas\nObjetivo: Dominio integral de las aplicaciones de la derivada en la resolución de problemas.
+END:VEVENT
+BEGIN:VEVENT
+UID:W14-S01@organizador-ia
+DTSTAMP:20251205T104126
+DTSTART;TZID=America/Santiago:08062026T190000
+DTEND;TZID=America/Santiago:08062026T210000
+SUMMARY:Antiderivadas e Integral Indefinida
+DESCRIPTION:Temas: Definición de antiderivada y familia de antiderivadas, Notación de la integral indefinida, Propiedades de la integral indefinida\nObjetivo: Comprensión del concepto de antiderivada e integral indefinida.
+END:VEVENT
+BEGIN:VEVENT
+UID:W14-S02@organizador-ia
+DTSTAMP:20251205T104126
+DTSTART;TZID=America/Santiago:10062026T190000
+DTEND;TZID=America/Santiago:10062026T210000
+SUMMARY:Reglas Básicas de Integración
+DESCRIPTION:Temas: Integrales de funciones potencia, trigonométricas, exponenciales, Integración por sustitución simple (introducción)\nObjetivo: Habilidad para aplicar las reglas básicas de integración y la sustitución simple.
+END:VEVENT
+BEGIN:VEVENT
+UID:W14-S03@organizador-ia
+DTSTAMP:20251205T104126
+DTSTART;TZID=America/Santiago:13062026T100000
+DTEND;TZID=America/Santiago:13062026T130000
+SUMMARY:Ejercicios de Integrales Indefinidas
+DESCRIPTION:Temas: Cálculo de integrales usando la tabla y propiedades, Resolución de integrales por sustitución\nObjetivo: Dominio en el cálculo de integrales indefinidas básicas y por sustitución.
+END:VEVENT
+BEGIN:VEVENT
+UID:W15-S01@organizador-ia
+DTSTAMP:20251205T104126
+DTSTART;TZID=America/Santiago:15062026T190000
+DTEND;TZID=America/Santiago:15062026T210000
+SUMMARY:Integral Definida y Sumas de Riemann
+DESCRIPTION:Temas: Introducción a las sumas de Riemann para aproximar áreas, Definición de integral definida, Propiedades de la integral definida\nObjetivo: Comprensión del concepto de integral definida y su relación con las sumas de Riemann.
+END:VEVENT
+BEGIN:VEVENT
+UID:W15-S02@organizador-ia
+DTSTAMP:20251205T104126
+DTSTART;TZID=America/Santiago:17062026T190000
+DTEND;TZID=America/Santiago:17062026T210000
+SUMMARY:Teorema Fundamental del Cálculo (TFC)
+DESCRIPTION:Temas: Enunciado y demostración del TFC (Parte 1: derivada de una integral), Enunciado y aplicación del TFC (Parte 2: evaluación de integrales definidas), Cálculo de integrales definidas\nObjetivo: Dominio del Teorema Fundamental del Cálculo y su aplicación en la evaluación de integrales.
+END:VEVENT
+BEGIN:VEVENT
+UID:W15-S03@organizador-ia
+DTSTAMP:20251205T104126
+DTSTART;TZID=America/Santiago:20062026T100000
+DTEND;TZID=America/Santiago:20062026T130000
+SUMMARY:Aplicaciones de la Integral Definida: Área
+DESCRIPTION:Temas: Cálculo de áreas entre la curva y el eje x, Cálculo de áreas entre dos curvas\nObjetivo: Habilidad para calcular áreas utilizando la integral definida.
+END:VEVENT
+BEGIN:VEVENT
+UID:W16-S01@organizador-ia
+DTSTAMP:20251205T104126
+DTSTART;TZID=America/Santiago:22062026T190000
+DTEND;TZID=America/Santiago:22062026T210000
+SUMMARY:Repaso General: Límites y Continuidad
+DESCRIPTION:Temas: Cálculo de límites diversos, Análisis de continuidad y discontinuidades, Teoremas de continuidad\nObjetivo: Consolidación de la Unidad 1 del curso.
+END:VEVENT
+BEGIN:VEVENT
+UID:W16-S02@organizador-ia
+DTSTAMP:20251205T104126
+DTSTART;TZID=America/Santiago:24062026T190000
+DTEND;TZID=America/Santiago:24062026T210000
+SUMMARY:Repaso General: Derivadas y Aplicaciones
+DESCRIPTION:Temas: Reglas de derivación, implícita, L'Hôpital, Análisis de funciones, optimización, tasas de cambio\nObjetivo: Consolidación de la Unidad 2 del curso.
+END:VEVENT
+BEGIN:VEVENT
+UID:W16-S03@organizador-ia
+DTSTAMP:20251205T104126
+DTSTART;TZID=America/Santiago:27062026T100000
+DTEND;TZID=America/Santiago:27062026T130000
+SUMMARY:Repaso General: Integrales y TFC
+DESCRIPTION:Temas: Integrales indefinidas y definidas, Teorema Fundamental del Cálculo, Aplicaciones a áreas\nObjetivo: Consolidación de los conceptos introductorios de integración.
+END:VEVENT
+BEGIN:VEVENT
+UID:W17-S01@organizador-ia
+DTSTAMP:20251205T104126
+DTSTART;TZID=America/Santiago:29062026T190000
+DTEND;TZID=America/Santiago:29062026T210000
+SUMMARY:Simulacro de Examen Final (Parte 1)
+DESCRIPTION:Temas: Resolución de secciones de un examen final, Enfoque en Límites y Derivadas\nObjetivo: Identificación de patrones de preguntas de examen y gestión del tiempo.
+END:VEVENT
+BEGIN:VEVENT
+UID:W17-S02@organizador-ia
+DTSTAMP:20251205T104126
+DTSTART;TZID=America/Santiago:01072026T190000
+DTEND;TZID=America/Santiago:01072026T210000
+SUMMARY:Simulacro de Examen Final (Parte 2)
+DESCRIPTION:Temas: Resolución de secciones de un examen final, Enfoque en Aplicaciones y Nociones de Integrales\nObjetivo: Evaluación del progreso general y áreas restantes para mejorar.
+END:VEVENT
+BEGIN:VEVENT
+UID:W17-S03@organizador-ia
+DTSTAMP:20251205T104126
+DTSTART;TZID=America/Santiago:04072026T100000
+DTEND;TZID=America/Santiago:04072026T130000
+SUMMARY:Sesión de Dudas y Temas Complejos
+DESCRIPTION:Temas: Resolución de dudas específicas de los estudiantes, Repaso de los temas identificados como más difíciles\nObjetivo: Clarificación final de conceptos y preparación mental para el examen.
+END:VEVENT
+BEGIN:VEVENT
+UID:W18-S01@organizador-ia
+DTSTAMP:20251205T104126
+DTSTART;TZID=America/Santiago:06072026T190000
+DTEND;TZID=America/Santiago:06072026T210000
+SUMMARY:Repaso Estratégico y Últimos Consejos
+DESCRIPTION:Temas: Repaso de los puntos más críticos y errores comunes, Estrategias para el día del examen: gestión del tiempo, revisión de respuestas\nObjetivo: Preparación final mental y académica para el examen.
+END:VEVENT
+BEGIN:VEVENT
+UID:W18-S02@organizador-ia
+DTSTAMP:20251205T104126
+DTSTART;TZID=America/Santiago:08072026T190000
+DTEND;TZID=America/Santiago:08072026T210000
+SUMMARY:Sesión Abierta de Preguntas y Última Práctica
+DESCRIPTION:Temas: Resolución de cualquier pregunta pendiente, Ejercicios de repaso rápido de alta prioridad\nObjetivo: Consolidación de cualquier duda final y refuerzo de la confianza.
+END:VEVENT
+BEGIN:VEVENT
+UID:W18-S03@organizador-ia
+DTSTAMP:20251205T104126
+DTSTART;TZID=America/Santiago:10072026T100000
+DTEND;TZID=America/Santiago:10072026T130000
+SUMMARY:Preparación Final Autónoma
+DESCRIPTION:Temas: Revisión personal de apuntes y ejercicios clave, Descanso y preparación mental para el examen.\nObjetivo: Autoevaluación final y estado óptimo para el examen.
+END:VEVENT
+END:VCALENDAR
