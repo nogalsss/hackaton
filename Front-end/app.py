@@ -1,3 +1,4 @@
+# type:ignore
 from usuarios import init_users_table, create_user, get_user, update_user
 from onboarding import (
     init_onboarding_table,
@@ -13,8 +14,6 @@ import base64
 from pathlib import Path
 
 import streamlit as st
-
-# Para importar el backend cuando corremos: streamlit run Front-end/app.py
 ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.append(str(ROOT))
